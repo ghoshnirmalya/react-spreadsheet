@@ -1,3 +1,61 @@
-.app {
-  background-color: #ccc;
+.container {
+  font-family: "Helvetica";
+  border: 1px solid #ddd;
+}
+
+.columnHeader {
+  display: flex;
+  background: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+.columnCell {
+  padding: 10px 20px;
+  border-right: 1px solid #ddd;
+  font-weight: 500;
+  width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.columnTitle {
+}
+
+.sortButton {
+  margin-right: 10px;
+  border: 0;
+  padding: 10px;
+}
+
+.sortButton:last-child {
+  margin-right: 0;
+}
+
+.sortButton:hover {
+  cursor: pointer;
+}
+
+.sortButton:focus {
+  outline: none;
+}
+
+.row {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.cell {
+  padding: 10px 20px;
+  border-right: 1px solid #ddd;
+  width: 200px;
+}
+
+.sort {
 }
