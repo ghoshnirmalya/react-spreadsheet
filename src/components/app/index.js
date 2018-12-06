@@ -50,7 +50,19 @@ class App extends Component {
         {[...Array(this.state.length)].map((key, index) => {
           return (
             <div key={index} className={styles.columnCells}>
-              {typeof columns === "undefined" ? "" : columns[index]}
+              {typeof columns === "undefined" ? (
+                <input
+                  className={styles.columnInput}
+                  type="text"
+                  defaultValue=""
+                />
+              ) : (
+                <input
+                  className={styles.columnInput}
+                  type="text"
+                  defaultValue={columns[index]}
+                />
+              )}
             </div>
           );
         })}
