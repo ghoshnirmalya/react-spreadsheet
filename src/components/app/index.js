@@ -2,78 +2,30 @@ import React, { Component } from "react";
 
 import styles from "./styles.module.css";
 
-const COLUMNS = [
-  {
-    key: "firstName",
-    title: "First name"
-  },
-  {
-    key: "lastName",
-    title: "Last name"
-  }
-];
-
-const ROWS = [
-  {
-    firstName: "John",
-    lastName: "Appleseed"
-  },
-  {
-    firstName: "Jane",
-    lastName: "Doe"
-  }
-];
-
 class App extends Component {
   state = {
-    sortBy: "firstName",
-    sortOrder: "asc",
-    data: ROWS
+    columns: [
+      ["John", "Jane", "Mary", "Roger", "Gerrard", "Mark", "Taylor"],
+      ["Doe", "Appleseed", "Tyler", "Lopez", "Moreno", "Barry", "Smith"]
+    ]
   };
 
-  handleSort = (by, order) => {
-    let data = this.state.data;
-
-    if (order === "asc") {
-      data.sort((a, b) => {
-        if (a[by] < b[by]) return -1;
-        if (a[by] > b[by]) return 1;
-        return 0;
-      });
-    } else {
-      data.sort((a, b) => {
-        if (a[by] < b[by]) return 1;
-        if (a[by] > b[by]) return -1;
-        return 0;
-      });
-    }
-
-    this.setState({
-      data
-    });
-  };
-
-  columnsHeaderNode = () => {
+  columnHeaderNode = index => {
     return (
       <div className={styles.columnHeader}>
-        {COLUMNS.map((column, index) => {
+        {index + 1}
+        {this.sortButtons(index)}
+      </div>
+    );
+  };
+
+  columnCellsNode = (columns, id) => {
+    return (
+      <div className={styles.columnCellsContainer}>
+        {columns.map((column, index) => {
           return (
-            <div className={styles.columnCell} key={index}>
-              <div className={styles.columnTitle}>{column.title}</div>
-              <div className={styles.sort}>
-                <button
-                  className={styles.sortButton}
-                  onClick={() => this.handleSort(column.key, "asc")}
-                >
-                  Asc
-                </button>
-                <button
-                  className={styles.sortButton}
-                  onClick={() => this.handleSort(column.key, "desc")}
-                >
-                  Desc
-                </button>
-              </div>
+            <div key={index} className={styles.columnCells}>
+              {column}
             </div>
           );
         })}
@@ -81,22 +33,93 @@ class App extends Component {
     );
   };
 
-  rowNode = () => {
-    return this.state.data.map((row, index) => {
+  columnNode = () => {
+    return this.state.columns.map((columns, index) => {
       return (
-        <div className={styles.row} key={index}>
-          <div className={styles.cell}>{row.firstName}</div>
-          <div className={styles.cell}>{row.lastName}</div>
+        <div key={index} className={styles.column}>
+          {this.columnHeaderNode(index)}
+          {this.columnCellsNode(columns, index)}
         </div>
       );
     });
   };
 
+  firstColumnNode = () => {
+    return (
+      <div className={styles.column}>
+        {this.state.columns.map((data, id) => {
+          if (id === 0) {
+            return this.state.columns[id].map((row, index) => {
+              return (
+                <div key={index} className={styles.firstColumn}>
+                  {index + 1}
+                </div>
+              );
+            });
+          } else {
+            return false;
+          }
+        })}
+      </div>
+    );
+  };
+
+  sortArrayOfArrays = type => {
+    const compareData = (a, b) => {
+      if (type === "asc") {
+        if (a < b) return -1;
+        if (a > b) return 1;
+      } else {
+        if (a < b) return 1;
+        if (a > b) return -1;
+      }
+
+      return 0;
+    };
+
+    return this.state.columns.map(array => {
+      return array.sort(compareData);
+    });
+  };
+
+  handleSort = (type = "asc") => {
+    let sortedData = this.sortArrayOfArrays(type);
+
+    this.setState({
+      columns: sortedData
+    });
+  };
+
+  sortButtons = index => {
+    return (
+      <div className={styles.sortButtonsContainer}>
+        <button
+          className={styles.sortButton}
+          onClick={() => {
+            this.handleSort("asc");
+          }}
+        >
+          ASC
+        </button>
+        <button
+          className={styles.sortButton}
+          onClick={() => {
+            this.handleSort("desc");
+          }}
+        >
+          DESC
+        </button>
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className={styles.container}>
-        {this.columnsHeaderNode()}
-        {this.rowNode()}
+        <div className={styles.columnsContainer}>
+          {this.firstColumnNode()}
+          {this.columnNode()}
+        </div>
       </div>
     );
   }
