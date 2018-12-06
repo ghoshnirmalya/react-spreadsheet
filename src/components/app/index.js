@@ -4,28 +4,53 @@ import styles from "./styles.module.css";
 
 class App extends Component {
   state = {
+    length: 10,
     columns: [
       ["John", "Jane", "Mary", "Roger", "Gerrard", "Mark", "Taylor"],
-      ["Doe", "Appleseed", "Tyler", "Lopez", "Moreno", "Barry", "Smith"]
+      ["Doe", "Appleseed", "Tyler", "Lopez", "Moreno", "Barry", "Smith"],
+      ["Doe", "Appleseed", "Tyler", "Lopez", "Moreno"]
     ]
   };
 
   columnHeaderNode = index => {
     return (
       <div className={styles.columnHeader}>
+        {this.addColumnButtonNode(index)}
         {index + 1}
         {this.sortButtons(index)}
+        {this.addColumnButtonNode(index + 1)}
       </div>
     );
+  };
+
+  addColumnButtonNode = position => {
+    return (
+      <button
+        className={styles.addColumnButton}
+        onClick={() => this.handleAddColumn(position)}
+      >
+        +1
+      </button>
+    );
+  };
+
+  handleAddColumn = position => {
+    let array = this.state.columns;
+
+    array.splice(position, 0, []);
+
+    this.setState({
+      columns: array
+    });
   };
 
   columnCellsNode = (columns, id) => {
     return (
       <div className={styles.columnCellsContainer}>
-        {columns.map((column, index) => {
+        {[...Array(this.state.length)].map((key, index) => {
           return (
             <div key={index} className={styles.columnCells}>
-              {column}
+              {typeof columns === "undefined" ? "" : columns[index]}
             </div>
           );
         })}
@@ -34,11 +59,11 @@ class App extends Component {
   };
 
   columnNode = () => {
-    return this.state.columns.map((columns, index) => {
+    return [...Array(this.state.length)].map((key, index) => {
       return (
         <div key={index} className={styles.column}>
           {this.columnHeaderNode(index)}
-          {this.columnCellsNode(columns, index)}
+          {this.columnCellsNode(this.state.columns[index], index)}
         </div>
       );
     });
@@ -47,18 +72,12 @@ class App extends Component {
   firstColumnNode = () => {
     return (
       <div className={styles.column}>
-        {this.state.columns.map((data, id) => {
-          if (id === 0) {
-            return this.state.columns[id].map((row, index) => {
-              return (
-                <div key={index} className={styles.firstColumn}>
-                  {index + 1}
-                </div>
-              );
-            });
-          } else {
-            return false;
-          }
+        {[...Array(this.state.length).keys()].map((data, index) => {
+          return (
+            <div key={index} className={styles.firstColumn}>
+              {index + 1}
+            </div>
+          );
         })}
       </div>
     );

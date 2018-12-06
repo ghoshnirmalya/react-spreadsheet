@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   background-color: #eee;
@@ -9,15 +15,12 @@
 
 .columnsContainer {
   display: flex;
-  width: 100%;
-  border: 1px solid#ccc;
 }
 
 .column {
-  width: 200px;
+  width: 300px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   border-right: 1px solid #ccc;
 }
 
@@ -31,6 +34,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #eee;
 }
 
 .columnCellsContainer {
@@ -42,6 +46,7 @@
   border-bottom: 1px solid #ccc;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 43px;
 }
 
 .columnCells:last-child {
@@ -49,13 +54,15 @@
 }
 
 .firstColumn {
-  padding: 10px 20px;
+  padding: 10px;
   border-bottom: 1px solid #ccc;
   width: 50px;
+  display: flex;
+  justify-content: center;
 }
 
 .firstColumn:first-child {
-  margin-top: 43px;
+  margin-top: 45px;
   border-top: 1px solid #ccc;
 }
 
@@ -84,5 +91,21 @@
 }
 
 .sortButton:focus {
+  outline: none;
+}
+
+.addColumnButton {
+  margin: 0 10px;
+  border: 0;
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: #fff;
+}
+
+.addColumnButton:hover {
+  cursor: pointer;
+}
+
+.addColumnButton:focus {
   outline: none;
 }
