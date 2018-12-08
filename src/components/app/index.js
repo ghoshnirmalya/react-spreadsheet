@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import Cell from "../cell";
+
 import styles from "./styles.module.css";
 
 class App extends Component {
@@ -23,6 +25,10 @@ class App extends Component {
     ]
   };
   componentDidMount() {
+    this.setState({
+      lengthX: this.props.rows,
+      lengthY: this.props.columns
+    });
     this.calculateData();
     this.forceUpdate();
   }
@@ -59,16 +65,13 @@ class App extends Component {
           {[...Array(this.state.lengthX).keys()].map((_, colIndex) => {
             return (
               <div key={colIndex} className={styles.columnCellsContainer}>
-                <div className={styles.columnCells}>
-                  <input
-                    className={styles.columnInput}
-                    type="text"
-                    value={data[colIndex]}
-                    onChange={e =>
-                      this.handleChange(e.target.value, colIndex, index)
-                    }
-                  />
-                </div>
+                <Cell
+                  value={data[colIndex]}
+                  onChange={this.handleChange}
+                  colIndex={colIndex}
+                  index={index}
+                  data={data}
+                />
               </div>
             );
           })}

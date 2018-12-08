@@ -1,0 +1,23 @@
+.columnCells {
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 40px;
+}
+
+.columnCells:first-child {
+  height: 40px;
+}
+
+.columnInput {
+  padding: 10px 20px;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  font-weight: 100;
+  font-size: 14px;
+}
+
+.columnInput:focus {
+  outline: none;
+}
