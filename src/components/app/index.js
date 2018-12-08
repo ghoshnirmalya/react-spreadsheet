@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import Cell from "../cell";
+import Row from "../row";
 
 import styles from "./styles.module.css";
 
@@ -24,13 +24,13 @@ class App extends Component {
       }
     ]
   };
+
   componentDidMount() {
     this.setState({
       lengthX: this.props.rows,
       lengthY: this.props.columns
     });
     this.calculateData();
-    this.forceUpdate();
   }
 
   calculateData() {
@@ -58,33 +58,17 @@ class App extends Component {
   }
 
   rowNode = () => {
-    return this.state.data.map((data, index) => {
-      return (
-        <div key={index} className={styles.column}>
-          {this.columnHeaderNode(index)}
-          {[...Array(this.state.lengthX).keys()].map((_, colIndex) => {
-            return (
-              <div key={colIndex} className={styles.columnCellsContainer}>
-                <Cell
-                  value={data[colIndex]}
-                  onChange={this.handleChange}
-                  colIndex={colIndex}
-                  index={index}
-                  data={data}
-                />
-              </div>
-            );
-          })}
-        </div>
-      );
-    });
+    return (
+      <Row
+        data={this.state.data}
+        lengthX={this.state.lengthX}
+        updateData={this.updateData}
+        handleAddColumn={this.handleAddColumn}
+      />
+    );
   };
 
-  handleChange = (value, row, column) => {
-    let data = this.state.data;
-
-    data[column][row] = value;
-
+  updateData = data => {
     this.setState({
       data
     });
@@ -118,27 +102,6 @@ class App extends Component {
     });
 
     this.calculateData();
-  };
-
-  addColumnButtonNode = position => {
-    return (
-      <button
-        className={styles.addColumnButton}
-        onClick={() => this.handleAddColumn(position)}
-      >
-        +1
-      </button>
-    );
-  };
-
-  columnHeaderNode = index => {
-    return (
-      <div className={styles.columnHeader}>
-        {this.addColumnButtonNode(index)}
-        {index + 1}
-        {this.addColumnButtonNode(index + 1)}
-      </div>
-    );
   };
 
   render() {

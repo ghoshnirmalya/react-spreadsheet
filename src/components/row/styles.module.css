@@ -1,0 +1,40 @@
+.addColumnButton {
+  margin: 0 10px;
+  border: 0;
+  padding: 5px 10px;
+  font-size: 12px;
+  background-color: #fff;
+}
+
+.addColumnButton:hover {
+  cursor: pointer;
+}
+
+.addColumnButton:focus {
+  outline: none;
+}
+
+.columnHeader {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eee;
+  height: 45px;
+}
+
+.column {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #ccc;
+}
+
+.column:first-child {
+  width: 300px;
+}
+
+.columnCellsContainer {
+  background-color: #fff;
+}
