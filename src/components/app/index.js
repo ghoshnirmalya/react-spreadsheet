@@ -4,23 +4,117 @@ import styles from "./styles.module.css";
 
 class App extends Component {
   state = {
-    length: 10,
-    columns: [
-      ["John", "Jane", "Mary", "Roger", "Gerrard", "Mark", "Taylor"],
-      ["Doe", "Appleseed", "Tyler", "Lopez", "Moreno", "Barry", "Smith"],
-      ["Doe", "Appleseed", "Tyler", "Lopez", "Moreno"]
+    lengthX: 10,
+    lengthY: 20,
+    data: [
+      {
+        0: "Ramsey",
+        1: "Rooney",
+        2: "Cole"
+      },
+      {
+        0: "Rabiot"
+      },
+      {
+        0: "Verrati",
+        1: "Scholes",
+        2: "Benitez"
+      }
     ]
   };
+  componentDidMount() {
+    this.calculateData();
+    this.forceUpdate();
+  }
 
-  columnHeaderNode = index => {
+  calculateData() {
+    let data = this.state.data;
+
+    for (let rowIndex = 0; rowIndex < this.state.lengthY; rowIndex++) {
+      if (typeof data[rowIndex] === "undefined") {
+        data[rowIndex] = {};
+      }
+
+      for (
+        let columnIndex = 0;
+        columnIndex < this.state.lengthX;
+        columnIndex++
+      ) {
+        if (typeof data[rowIndex][columnIndex] === "undefined") {
+          data[rowIndex][columnIndex] = "";
+        }
+      }
+    }
+
+    this.setState({
+      data
+    });
+  }
+
+  rowNode = () => {
+    return this.state.data.map((data, index) => {
+      return (
+        <div key={index} className={styles.column}>
+          {this.columnHeaderNode(index)}
+          {[...Array(this.state.lengthX).keys()].map((_, colIndex) => {
+            return (
+              <div key={colIndex} className={styles.columnCellsContainer}>
+                <div className={styles.columnCells}>
+                  <input
+                    className={styles.columnInput}
+                    type="text"
+                    value={data[colIndex]}
+                    onChange={e =>
+                      this.handleChange(e.target.value, colIndex, index)
+                    }
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      );
+    });
+  };
+
+  handleChange = (value, row, column) => {
+    let data = this.state.data;
+
+    data[column][row] = value;
+
+    this.setState({
+      data
+    });
+  };
+
+  firstColumnNode = () => {
     return (
-      <div className={styles.columnHeader}>
-        {this.addColumnButtonNode(index)}
-        {index + 1}
-        {this.sortButtons(index)}
-        {this.addColumnButtonNode(index + 1)}
+      <div className={styles.column}>
+        {[...Array(this.state.lengthX).keys()].map((data, index) => {
+          return (
+            <div key={index} className={styles.firstColumn}>
+              {index + 1}
+            </div>
+          );
+        })}
       </div>
     );
+  };
+
+  handleAddColumn = position => {
+    this.setState({
+      lengthY: this.state.lengthY + 1
+    });
+
+    let array = this.state.data;
+
+    array.splice(position, 0, { 0: "" });
+
+    this.setState({
+      data: array
+    });
+
+    this.calculateData();
   };
 
   addColumnButtonNode = position => {
@@ -34,112 +128,12 @@ class App extends Component {
     );
   };
 
-  handleAddColumn = position => {
-    let array = this.state.columns;
-
-    array.splice(position, 0, []);
-
-    this.setState({
-      columns: array
-    });
-  };
-
-  columnCellsNode = (columns, id) => {
+  columnHeaderNode = index => {
     return (
-      <div className={styles.columnCellsContainer}>
-        {[...Array(this.state.length)].map((key, index) => {
-          return (
-            <div key={index} className={styles.columnCells}>
-              {typeof columns === "undefined" ? (
-                <input
-                  className={styles.columnInput}
-                  type="text"
-                  defaultValue=""
-                />
-              ) : (
-                <input
-                  className={styles.columnInput}
-                  type="text"
-                  defaultValue={columns[index]}
-                />
-              )}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  columnNode = () => {
-    return [...Array(this.state.length)].map((key, index) => {
-      return (
-        <div key={index} className={styles.column}>
-          {this.columnHeaderNode(index)}
-          {this.columnCellsNode(this.state.columns[index], index)}
-        </div>
-      );
-    });
-  };
-
-  firstColumnNode = () => {
-    return (
-      <div className={styles.column}>
-        {[...Array(this.state.length).keys()].map((data, index) => {
-          return (
-            <div key={index} className={styles.firstColumn}>
-              {index + 1}
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  sortArrayOfArrays = type => {
-    const compareData = (a, b) => {
-      if (type === "asc") {
-        if (a < b) return -1;
-        if (a > b) return 1;
-      } else {
-        if (a < b) return 1;
-        if (a > b) return -1;
-      }
-
-      return 0;
-    };
-
-    return this.state.columns.map(array => {
-      return array.sort(compareData);
-    });
-  };
-
-  handleSort = (type = "asc") => {
-    let sortedData = this.sortArrayOfArrays(type);
-
-    this.setState({
-      columns: sortedData
-    });
-  };
-
-  sortButtons = index => {
-    return (
-      <div className={styles.sortButtonsContainer}>
-        <button
-          className={styles.sortButton}
-          onClick={() => {
-            this.handleSort("asc");
-          }}
-        >
-          ASC
-        </button>
-        <button
-          className={styles.sortButton}
-          onClick={() => {
-            this.handleSort("desc");
-          }}
-        >
-          DESC
-        </button>
+      <div className={styles.columnHeader}>
+        {this.addColumnButtonNode(index)}
+        {index + 1}
+        {this.addColumnButtonNode(index + 1)}
       </div>
     );
   };
@@ -147,10 +141,8 @@ class App extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <div className={styles.columnsContainer}>
-          {this.firstColumnNode()}
-          {this.columnNode()}
-        </div>
+        {this.firstColumnNode()}
+        <div className={styles.columnsContainer}>{this.rowNode()}</div>
       </div>
     );
   }
